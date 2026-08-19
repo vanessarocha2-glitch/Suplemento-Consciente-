@@ -1,4 +1,4 @@
-# Suplementos Check — Implementation Plan
+# Suplemento Consciente — Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
@@ -1121,7 +1121,7 @@ export default function LoginPage() {
         <CardHeader>
           <CardTitle>Painel administrativo</CardTitle>
           <CardDescription>
-            Acesso restrito ao administrador do Suplementos Check.
+            Acesso restrito ao administrador do Suplemento Consciente.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -1196,7 +1196,7 @@ export default async function AdminLayout({
     <div className="min-h-screen">
       <header className="border-b">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-4 p-4">
-          <span className="font-semibold">Suplementos Check</span>
+          <span className="font-semibold">Suplemento Consciente</span>
           <nav className="flex flex-wrap gap-4 text-sm">
             {navItems.map((item) => (
               <Link
@@ -2926,7 +2926,7 @@ import { Toaster } from '@/components/ui/sonner'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Suplementos Check',
+  title: 'Suplemento Consciente',
   description:
     'Consulte ingredientes, situação na Anvisa e alertas de uso de suplementos alimentares.',
 }
@@ -2942,7 +2942,7 @@ export default function RootLayout({
         <header className="border-b">
           <div className="mx-auto flex max-w-5xl items-center gap-6 p-4">
             <Link href="/" className="font-semibold">
-              Suplementos Check
+              Suplemento Consciente
             </Link>
             <nav className="flex gap-4 text-sm text-muted-foreground">
               <Link href="/videos" className="hover:text-foreground">
@@ -4403,7 +4403,7 @@ Expected: os testes restantes continuam passando
 Criar `README.md`:
 
 ```markdown
-# Suplementos Check
+# Suplemento Consciente
 
 Plataforma para consulta de informações sobre suplementos alimentares —
 ingredientes, finalidade, situação na Anvisa, conformidade legislativa e

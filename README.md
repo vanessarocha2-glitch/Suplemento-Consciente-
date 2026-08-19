@@ -1,4 +1,4 @@
-# Suplementos Check
+# Suplemento Consciente
 
 Plataforma web que permite a qualquer pessoa consultar informações confiáveis sobre suplementos alimentares — **sem precisar criar conta**. Um único administrador cadastra e mantém todo o conteúdo através de um painel próprio.
 

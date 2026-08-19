@@ -1,4 +1,4 @@
-# Suplementos Check — Design
+# Suplemento Consciente — Design
 
 **Data:** 2026-08-19
 **Contexto:** Trabalho de TCC
