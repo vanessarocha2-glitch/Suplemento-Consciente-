@@ -40,12 +40,3 @@ Não existe cadastro de usuário comum. Um único administrador loga em `/admin`
 | Gerenciador de pacotes | pnpm |
 
 A autorização é resolvida com **Row Level Security** do Postgres: qualquer visitante lê os dados livremente (`anon`), e só o administrador autenticado escreve. A única exceção é a pontuação do quiz — gravada por visitantes sem login através de uma função `security definer` que recalcula a nota no próprio banco, para que ela nunca possa ser forjada pelo cliente.
-
-## Documentação
-
-- Design completo: [`docs/superpowers/specs/2026-08-19-suplementos-check-design.md`](docs/superpowers/specs/2026-08-19-suplementos-check-design.md)
-- Plano de implementação: [`docs/superpowers/plans/2026-08-19-suplementos-check.md`](docs/superpowers/plans/2026-08-19-suplementos-check.md)
-
-## Status
-
-Em desenvolvimento. Instruções de instalação e execução local serão adicionadas ao final da implementação.
