@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Suplementos Check
 
-## Getting Started
+Plataforma web que permite a qualquer pessoa consultar informações confiáveis sobre suplementos alimentares — **sem precisar criar conta**. Um único administrador cadastra e mantém todo o conteúdo através de um painel próprio.
 
-First, run the development server:
+> Projeto desenvolvido como trabalho de TCC.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## O problema
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Suplementos alimentares (whey protein, creatina, vitaminas, etc.) são vendidos em grande quantidade, mas informações claras sobre **o que cada produto contém, para que serve, se está regularizado na Anvisa e se as alegações do rótulo são permitidas por lei** costumam estar dispersas ou de difícil acesso — principalmente para adolescentes e consumidores sem orientação profissional.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## A proposta
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+O visitante busca um suplemento pelo nome (ou filtra por marca) e encontra, em uma única página:
 
-## Learn More
+- **Ingredientes** — explicados de forma simples, o que são e para que servem, com a dosagem daquele produto específico
+- **Finalidade e modo de uso**
+- **Situação na Anvisa** — regularizado, em análise ou não localizado
+- **Conformidade legislativa** — quais alegações do rótulo são ou não permitidas pela legislação vigente (ex.: RDC 243/2018), com a justificativa
+- **Alertas de uso** — avisos sobre uso inadequado, com ênfase em restrição para adolescentes e necessidade de orientação profissional
 
-To learn more about Next.js, take a look at the following resources:
+Além da consulta, o site oferece conteúdo educativo:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Vídeos curtos** sobre suplementos, usos e cuidados (com associação opcional a um produto específico)
+- **Quiz** de múltipla escolha, com pontuação calculada no servidor e um **ranking dos 10 melhores resultados**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Como o conteúdo é mantido
 
-## Deploy on Vercel
+Não existe cadastro de usuário comum. Um único administrador loga em `/admin` e, por um painel próprio, cadastra marcas, ingredientes, alertas, suplementos, vídeos e perguntas do quiz. Essa é uma escolha deliberada: como só existe um administrador, não há tela pública de criação de conta — a conta desse administrador é provisionada diretamente no Supabase.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Stack
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Camada | Tecnologia |
+|---|---|
+| Framework | Next.js (App Router, TypeScript) |
+| UI | ShadCN/UI + Tailwind CSS |
+| Banco de dados | Supabase (PostgreSQL) |
+| Autenticação | Supabase Auth (email/senha) |
+| Validação | Zod |
+| Testes | Vitest + Testing Library |
+| Gerenciador de pacotes | pnpm |
+
+A autorização é resolvida com **Row Level Security** do Postgres: qualquer visitante lê os dados livremente (`anon`), e só o administrador autenticado escreve. A única exceção é a pontuação do quiz — gravada por visitantes sem login através de uma função `security definer` que recalcula a nota no próprio banco, para que ela nunca possa ser forjada pelo cliente.
+
+## Documentação
+
+- Design completo: [`docs/superpowers/specs/2026-08-19-suplementos-check-design.md`](docs/superpowers/specs/2026-08-19-suplementos-check-design.md)
+- Plano de implementação: [`docs/superpowers/plans/2026-08-19-suplementos-check.md`](docs/superpowers/plans/2026-08-19-suplementos-check.md)
+
+## Status
+
+Em desenvolvimento. Instruções de instalação e execução local serão adicionadas ao final da implementação.
