@@ -93,4 +93,6 @@ export type SubmittedScore = {
   correct_count: number
   total_questions: number
   percentage: number
+  /** Mapa question_id -> resposta correta, devolvido só depois da nota já estar gravada. */
+  answer_key: Record<string, string>
 }
