@@ -6,6 +6,7 @@ import {
   supplementSchema,
   quizQuestionSchema,
   legislationClaimSchema,
+  videoSchema,
 } from './schemas'
 
 describe('categorySchema', () => {
@@ -163,5 +164,31 @@ describe('quizQuestionSchema', () => {
     expect(result.success ? undefined : result.error.issues[0].message).toBe(
       'A opção não pode ficar vazia'
     )
+  })
+})
+
+describe('videoSchema', () => {
+  const valido = {
+    title: 'Como usar creatina',
+    description: 'Vídeo curto sobre dosagem e cuidados.',
+    video_url: 'https://youtube.com/watch?v=abc',
+    supplement_id: '',
+  }
+
+  it('aceita uma URL http(s) valida', () => {
+    expect(videoSchema.safeParse(valido).success).toBe(true)
+  })
+
+  it('rejeita esquemas perigosos como javascript:', () => {
+    const result = videoSchema.safeParse({ ...valido, video_url: 'javascript:alert(1)' })
+    expect(result.success).toBe(false)
+  })
+
+  it('rejeita esquema data:', () => {
+    const result = videoSchema.safeParse({
+      ...valido,
+      video_url: 'data:text/html,<script>alert(1)</script>',
+    })
+    expect(result.success).toBe(false)
   })
 })

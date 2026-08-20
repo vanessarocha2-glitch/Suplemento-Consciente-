@@ -56,7 +56,9 @@ export const supplementSchema = z.object({
 export const videoSchema = z.object({
   title: z.string().trim().min(1, 'Informe o título'),
   description: z.string().trim().min(1, 'Informe a descrição'),
-  video_url: z.url('Informe uma URL válida'),
+  // httpUrl (não url) rejeita esquemas como javascript:/data: — o link é
+  // renderizado direto num <a href> em página pública sem autenticação.
+  video_url: z.httpUrl('Informe uma URL válida'),
   supplement_id: optionalUuid,
 })
 
