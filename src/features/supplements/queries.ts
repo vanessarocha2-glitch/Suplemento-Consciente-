@@ -1,3 +1,4 @@
+import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 import type { SearchFilters } from '@/lib/search'
 import type {
@@ -48,6 +49,12 @@ export async function searchSupplements(
 export async function getSupplement(
   id: string
 ): Promise<SupplementDetail | null> {
+  // Um id que não é UUID nem existe: tratamos os dois como "não encontrado"
+  // em vez de deixar o Postgres lançar "invalid input syntax for type uuid"
+  // — todo chamador (páginas públicas, admin) se beneficia sem precisar
+  // validar o id antes de chamar esta função.
+  if (!z.uuid().safeParse(id).success) return null
+
   const supabase = await createClient()
 
   const { data, error } = await supabase
