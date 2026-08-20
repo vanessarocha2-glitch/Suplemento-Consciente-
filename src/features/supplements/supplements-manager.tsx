@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import Link from 'next/link'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
@@ -20,11 +20,13 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { SupplementForm } from './supplement-form'
+import { getSupplementDetail } from './actions'
 import type { ActionResult } from '@/components/crud-manager'
 import type {
   Alert,
   Category,
   Ingredient,
+  SupplementDetail,
   SupplementListItem,
 } from '@/lib/types'
 
@@ -52,6 +54,14 @@ export function SupplementsManager({
   deleteAction,
 }: Props) {
   const [open, setOpen] = useState(false)
+  const [editingSupplement, setEditingSupplement] = useState<SupplementDetail | null>(
+    null
+  )
+  const [loadingEditId, setLoadingEditId] = useState<string | null>(null)
+  // Descarta respostas de openEdit() que não são mais a mais recente —
+  // evita que um fetch lento reabra o dialog depois que o usuário já
+  // fechou, clicou em "Novo suplemento" ou editou outra linha.
+  const editRequestId = useRef(0)
 
   async function handleDelete(id: string) {
     const formData = new FormData()
@@ -64,25 +74,70 @@ export function SupplementsManager({
     toast.success('Suplemento excluído')
   }
 
+  async function openEdit(id: string) {
+    const requestId = ++editRequestId.current
+    setLoadingEditId(id)
+
+    try {
+      const detail = await getSupplementDetail(id)
+      if (requestId !== editRequestId.current) return // usuário já seguiu em frente
+
+      if (!detail) {
+        toast.error('Não foi possível carregar o suplemento')
+        return
+      }
+      setEditingSupplement(detail)
+      setOpen(true)
+    } catch {
+      if (requestId !== editRequestId.current) return
+      toast.error('Falha ao carregar o suplemento. Tente novamente.')
+    } finally {
+      if (requestId === editRequestId.current) setLoadingEditId(null)
+    }
+  }
+
+  function handleOpenChange(next: boolean) {
+    editRequestId.current++
+    setOpen(next)
+    if (!next) setEditingSupplement(null)
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold">Suplementos</h1>
 
-        <Dialog open={open} onOpenChange={setOpen}>
+        <Dialog open={open} onOpenChange={handleOpenChange}>
           <DialogTrigger asChild>
-            <Button disabled={brands.length === 0}>Novo suplemento</Button>
+            <Button
+              disabled={brands.length === 0}
+              onClick={() => {
+                editRequestId.current++
+                setEditingSupplement(null)
+                setOpen(true)
+              }}
+            >
+              Novo suplemento
+            </Button>
           </DialogTrigger>
           <DialogContent className="max-h-[85vh] max-w-2xl overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>Novo suplemento</DialogTitle>
+              <DialogTitle>
+                {editingSupplement ? 'Editar suplemento' : 'Novo suplemento'}
+              </DialogTitle>
             </DialogHeader>
             <SupplementForm
+              key={editingSupplement?.id ?? 'new'}
               brands={brands}
               ingredients={ingredients}
               alerts={alerts}
               saveAction={saveAction}
-              onSaved={() => setOpen(false)}
+              supplement={editingSupplement}
+              onSaved={() => {
+                editRequestId.current++
+                setOpen(false)
+                setEditingSupplement(null)
+              }}
             />
           </DialogContent>
         </Dialog>
@@ -115,6 +170,14 @@ export function SupplementsManager({
                 <TableCell className="space-x-2">
                   <Button size="sm" variant="outline" asChild>
                     <Link href={`/supplements/${supplement.id}`}>Ver</Link>
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    disabled={loadingEditId === supplement.id}
+                    onClick={() => openEdit(supplement.id)}
+                  >
+                    {loadingEditId === supplement.id ? 'Carregando...' : 'Editar'}
                   </Button>
                   <Button
                     size="sm"

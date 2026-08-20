@@ -14,7 +14,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import type { Alert, Category, Ingredient, LegislationClaim } from '@/lib/types'
+import type {
+  Alert,
+  Category,
+  Ingredient,
+  LegislationClaim,
+  SupplementDetail,
+} from '@/lib/types'
 import type { ActionResult } from '@/components/crud-manager'
 
 type Props = {
@@ -23,6 +29,7 @@ type Props = {
   alerts: Alert[]
   saveAction: (formData: FormData) => Promise<ActionResult>
   onSaved: () => void
+  supplement?: SupplementDetail | null
 }
 
 export function SupplementForm({
@@ -31,10 +38,17 @@ export function SupplementForm({
   alerts,
   saveAction,
   onSaved,
+  supplement,
 }: Props) {
-  const [selectedIngredients, setSelectedIngredients] = useState<string[]>([])
-  const [selectedAlerts, setSelectedAlerts] = useState<string[]>([])
-  const [claims, setClaims] = useState<LegislationClaim[]>([])
+  const [selectedIngredients, setSelectedIngredients] = useState<string[]>(
+    () => supplement?.ingredients.map((ingredient) => ingredient.id) ?? []
+  )
+  const [selectedAlerts, setSelectedAlerts] = useState<string[]>(
+    () => supplement?.alerts.map((alert) => alert.id) ?? []
+  )
+  const [claims, setClaims] = useState<LegislationClaim[]>(
+    () => supplement?.legislation_info ?? []
+  )
 
   function toggle(list: string[], id: string): string[] {
     return list.includes(id) ? list.filter((item) => item !== id) : [...list, id]
@@ -75,15 +89,17 @@ export function SupplementForm({
 
   return (
     <form action={handleSubmit} className="space-y-6">
+      {supplement && <input type="hidden" name="id" value={supplement.id} />}
+
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="name">Nome do suplemento</Label>
-          <Input id="name" name="name" required />
+          <Input id="name" name="name" defaultValue={supplement?.name ?? ''} required />
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="category_id">Marca</Label>
-          <Select name="category_id">
+          <Select name="category_id" defaultValue={supplement?.category_id ?? ''}>
             <SelectTrigger id="category_id">
               <SelectValue placeholder="Selecione a marca" />
             </SelectTrigger>
@@ -100,18 +116,28 @@ export function SupplementForm({
 
       <div className="space-y-2">
         <Label htmlFor="purpose">Para que serve</Label>
-        <Textarea id="purpose" name="purpose" required />
+        <Textarea
+          id="purpose"
+          name="purpose"
+          defaultValue={supplement?.purpose ?? ''}
+          required
+        />
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="usage_instructions">Como usar</Label>
-        <Textarea id="usage_instructions" name="usage_instructions" required />
+        <Textarea
+          id="usage_instructions"
+          name="usage_instructions"
+          defaultValue={supplement?.usage_instructions ?? ''}
+          required
+        />
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">
           <Label htmlFor="anvisa_status">Situação na Anvisa</Label>
-          <Select name="anvisa_status" defaultValue="not_found">
+          <Select name="anvisa_status" defaultValue={supplement?.anvisa_status ?? 'not_found'}>
             <SelectTrigger id="anvisa_status">
               <SelectValue />
             </SelectTrigger>
@@ -125,13 +151,22 @@ export function SupplementForm({
 
         <div className="space-y-2">
           <Label htmlFor="anvisa_registration">Número de registro</Label>
-          <Input id="anvisa_registration" name="anvisa_registration" />
+          <Input
+            id="anvisa_registration"
+            name="anvisa_registration"
+            defaultValue={supplement?.anvisa_registration ?? ''}
+          />
         </div>
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="image_url">URL da imagem</Label>
-        <Input id="image_url" name="image_url" type="url" />
+        <Input
+          id="image_url"
+          name="image_url"
+          type="url"
+          defaultValue={supplement?.image_url ?? ''}
+        />
       </div>
 
       <fieldset className="space-y-3 rounded-md border p-4">
@@ -159,6 +194,10 @@ export function SupplementForm({
                 <Input
                   name={`dosage_${ingredient.id}`}
                   placeholder="Dosagem (ex: 500mg)"
+                  defaultValue={
+                    supplement?.ingredients.find((item) => item.id === ingredient.id)
+                      ?.dosage ?? ''
+                  }
                   className="w-48"
                 />
               )}

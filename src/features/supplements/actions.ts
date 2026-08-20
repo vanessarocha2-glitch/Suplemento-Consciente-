@@ -3,7 +3,9 @@
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { supplementSchema } from '@/lib/schemas'
+import { getSupplement } from './queries'
 import type { ActionResult } from '@/components/crud-manager'
+import type { SupplementDetail } from '@/lib/types'
 
 /** Campos JSON e multi-select chegam serializados no FormData. */
 function parseJsonField<T>(raw: FormDataEntryValue | null, fallback: T): T {
@@ -91,6 +93,10 @@ export async function saveSupplement(formData: FormData): Promise<ActionResult> 
   revalidatePath('/')
   revalidatePath(`/supplements/${supplementId}`)
   return { error: null }
+}
+
+export async function getSupplementDetail(id: string): Promise<SupplementDetail | null> {
+  return getSupplement(id)
 }
 
 export async function deleteSupplement(formData: FormData): Promise<ActionResult> {
