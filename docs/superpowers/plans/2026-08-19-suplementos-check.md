@@ -2806,6 +2806,23 @@ git commit -m "feat: adicionar pagina admin de suplementos"
 
 ---
 
+---
+
+### Task 18b: Editar suplementos (amendment)
+
+A revisão de qualidade da Task 18 encontrou um fio solto entre as Tasks 15-18: `saveSupplement` (Task 16) já tem o branch de `update` funcionando, e `getSupplementLinks` (Task 15) já existe pronta para popular um formulário de edição — mas nenhuma tela chegou a usar isso. `SupplementsManager` só tinha "Novo suplemento" e "Excluir"; para corrigir qualquer campo era preciso apagar e recriar o suplemento inteiro, perdendo os vínculos de ingredientes/alertas/legislação. Decisão: conectar a edição agora, antes de seguir para a Fase 4.
+
+**Files:**
+- Modify: `src/features/supplements/actions.ts` — adicionar `getSupplementDetail(id)` (wrapper de `getSupplement`, exportado como Server Action pois o arquivo já é `'use server'`, chamável direto do client)
+- Modify: `src/features/supplements/supplement-form.tsx` — aceitar `supplement?: SupplementDetail | null` opcional; quando presente, preencher `defaultValue` de todos os campos nativos e dos `Select` (`category_id`, `anvisa_status`), inicializar `selectedIngredients`/`selectedAlerts`/`claims` a partir de `supplement.ingredients`/`.alerts`/`.legislation_info`, incluir `<input type="hidden" name="id" value={supplement.id} />`, e usar `defaultValue` na dosagem de cada ingrediente já vinculado
+- Modify: `src/features/supplements/supplements-manager.tsx` — adicionar estado `editingSupplement: SupplementDetail | null`, botão "Editar" por linha que chama `getSupplementDetail(id)` e abre o dialog com os dados carregados, título do dialog dinâmico ("Novo suplemento" / "Editar suplemento"), resetar `editingSupplement` ao fechar
+
+O componente `SupplementForm` deve ser remontado ao trocar de registro (mesmo truque do `CrudManager`, Task 11): `key={editingSupplement?.id ?? 'new'}` no `SupplementForm` dentro do `SupplementsManager`, para que os `defaultValue` atualizem corretamente.
+
+Testar: editar um suplemento existente trocando nome, marca, status Anvisa, removendo um ingrediente e adicionando outro, mudando uma dosagem, editando a alegação legislativa — salvar e confirmar via `getSupplement` que tudo persistiu corretamente e que os vínculos antigos não sobraram (mesma lógica de "apagar tudo e reinserir" da Task 16, já testada).
+
+---
+
 ## Fase 4 — Área pública
 
 ### Task 19: Home com busca e filtro por marca
