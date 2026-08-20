@@ -3484,6 +3484,16 @@ git commit -m "feat: adicionar videos educativos"
 
 ---
 
+> **Amendment (pós Task 5, revisão de segurança):** a Task 5 foi corrigida para remover a leitura pública direta de `quiz_questions` — a coluna `correct_answer` é o gabarito e não pode vazar para o visitante antes (ou durante) a resposta. Existe agora uma função seria `public_quiz_questions()` (`security definer`, sem `correct_answer`) que o visitante usa em vez de `select('*')` na tabela.
+>
+> Isso afeta as Tasks 22-24, que ainda não foram implementadas quando esta nota foi escrita:
+> - **Task 24, página pública (`/quiz`):** buscar as perguntas via `supabase.rpc('public_quiz_questions')`, não via `.from('quiz_questions').select('*')`. O tipo retornado não tem `correct_answer`.
+> - **Task 24, página admin (`/admin/quiz`):** continua usando `.from('quiz_questions').select('*')` normalmente — o admin autenticado tem acesso à tabela completa, incluindo `correct_answer`, via a política "escrita admin".
+> - **Revelar a resposta certa após o envio:** como o cliente nunca recebe `correct_answer` antes de responder, a Task 23 (`submit_quiz_score`) precisa devolver também o gabarito por pergunta (ex.: um `jsonb` `{question_id: correct_answer}` ou um array de detalhes) na resposta da função — só depois que a nota já foi calculada no banco é seguro revelar. A UI de resultado (`quiz-runner.tsx`, Task 24) deve usar esse gabarito devolvido pelo servidor para colorir as alternativas e mostrar a explicação, em vez de ler `question.correct_answer` (que não existe nos dados públicos).
+> - **`scoreQuiz` (Task 22):** continua útil para o cálculo local de UI (contagem, porcentagem, mensagem de desempenho), mas só pode ser chamado com o gabarito depois que ele for devolvido pelo servidor no envio — não antes.
+>
+> Resolver isso em detalhe quando as Tasks 22-24 forem implementadas, ajustando o código dos blocos abaixo conforme necessário (o texto original das tasks abaixo ainda assume o design antigo, sem essa restrição).
+
 ### Task 22: Pontuação do quiz
 
 **Files:**
