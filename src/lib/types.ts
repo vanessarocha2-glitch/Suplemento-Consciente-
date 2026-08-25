@@ -78,6 +78,9 @@ export type QuizQuestion = {
   created_at: string
 }
 
+/** Formato de quiz_questions sem o gabarito — o que public_quiz_questions() devolve. */
+export type PublicQuizQuestion = Omit<QuizQuestion, 'correct_answer'>
+
 export type QuizScore = {
   id: string
   player_name: string
