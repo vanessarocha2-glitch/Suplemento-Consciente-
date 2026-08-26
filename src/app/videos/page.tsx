@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { listVideos } from '@/features/videos/queries'
+import { youtubeThumbnail } from '@/lib/youtube'
 
 function PlayGlyph({ size = 14 }: { size?: number }) {
   return (
@@ -14,6 +15,47 @@ function PlayGlyph({ size = 14 }: { size?: number }) {
         marginLeft: 3,
       }}
     />
+  )
+}
+
+/** Miniatura do vídeo: a do YouTube quando dá para derivar da URL,
+    senão um fundo suave com o play — sem placeholder listrado. */
+function VideoThumb({
+  url,
+  title,
+  playSize = 12,
+  circleClass = 'size-11',
+}: {
+  url: string
+  title: string
+  playSize?: number
+  circleClass?: string
+}) {
+  const thumbnail = youtubeThumbnail(url)
+
+  return (
+    <div
+      className={`relative aspect-video overflow-hidden rounded-[16px] ${
+        thumbnail ? '' : 'bg-accent-2/25'
+      }`}
+    >
+      {thumbnail && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={thumbnail}
+          alt={title}
+          loading="lazy"
+          className="size-full object-cover [filter:saturate(0.6)_contrast(0.85)_brightness(1.1)]"
+        />
+      )}
+      <span className="absolute inset-0 flex items-center justify-center">
+        <span
+          className={`flex items-center justify-center rounded-full bg-card/95 shadow-md ${circleClass}`}
+        >
+          <PlayGlyph size={playSize} />
+        </span>
+      </span>
+    </div>
   )
 }
 
@@ -64,12 +106,13 @@ export default async function VideosPage() {
               rel="noopener noreferrer"
               className="group flex flex-col gap-6 rounded-[24px] bg-card p-5 shadow-sm transition-shadow hover:shadow-md sm:flex-row sm:items-stretch"
             >
-              <div className="relative aspect-video shrink-0 overflow-hidden rounded-[16px] bg-[repeating-linear-gradient(135deg,var(--color-neutral-200)_0_10px,var(--color-neutral-300)_10px_20px)] sm:w-[46%]">
-                <span className="absolute inset-0 flex items-center justify-center">
-                  <span className="flex size-16 items-center justify-center rounded-full bg-card shadow-md">
-                    <PlayGlyph size={18} />
-                  </span>
-                </span>
+              <div className="shrink-0 sm:w-[46%]">
+                <VideoThumb
+                  url={featured.video_url}
+                  title={featured.title}
+                  playSize={18}
+                  circleClass="size-16"
+                />
               </div>
               <div className="flex flex-col justify-center gap-2.5 py-1">
                 <span className="text-[10px] tracking-[0.1em] text-primary uppercase">
@@ -98,13 +141,7 @@ export default async function VideosPage() {
                   rel="noopener noreferrer"
                   className="group flex h-full flex-col gap-3 rounded-[22px] bg-card p-3.5 shadow-sm transition-shadow hover:shadow-md"
                 >
-                  <div className="relative aspect-video overflow-hidden rounded-[16px] bg-[repeating-linear-gradient(135deg,var(--color-neutral-200)_0_9px,var(--color-neutral-300)_9px_18px)]">
-                    <span className="absolute inset-0 flex items-center justify-center">
-                      <span className="flex size-11 items-center justify-center rounded-full bg-card shadow-sm">
-                        <PlayGlyph size={12} />
-                      </span>
-                    </span>
-                  </div>
+                  <VideoThumb url={video.video_url} title={video.title} />
                   <div className="flex flex-1 flex-col gap-1.5 px-0.5">
                     <span className="font-heading text-lg leading-tight">
                       {video.title}
