@@ -5,6 +5,8 @@ import { parseSearchParams } from '@/lib/search'
 import { searchSupplements } from '@/features/supplements/queries'
 import { listBrands } from '@/features/brands/queries'
 
+const popularTerms = ['Whey protein', 'Creatina', 'Pré-treino', 'Colágeno']
+
 export default async function HomePage({
   searchParams,
 }: {
@@ -20,39 +22,75 @@ export default async function HomePage({
   const hasFilters = filters.term !== '' || filters.brandId !== null
 
   return (
-    <main className="mx-auto max-w-5xl space-y-8 p-4 py-8">
-      <div className="space-y-2">
-        <h1 className="text-3xl font-semibold">Consulte seu suplemento</h1>
-        <p className="text-muted-foreground">
-          Veja ingredientes, finalidade, situação na Anvisa e alertas de uso.
-        </p>
+    <div className="mx-auto max-w-5xl space-y-10 px-4 py-8 sm:px-8 sm:py-12">
+      <div className="grid items-end gap-10 sm:grid-cols-[1fr_auto]">
+        <div>
+          <span className="text-[11px] tracking-[0.1em] text-primary uppercase">
+            Base pública da Anvisa
+          </span>
+          <h1 className="mt-2 text-4xl tracking-tight sm:text-5xl">
+            Consulte seu suplemento
+          </h1>
+          <p className="mt-3 max-w-lg text-lg text-muted-foreground">
+            Veja ingredientes, finalidade, situação na Anvisa e alertas de uso.
+          </p>
+        </div>
+        <div className="hidden size-36 shrink-0 items-center justify-center justify-self-end rounded-full bg-accent-2/25 sm:flex" />
       </div>
 
-      {/* key força o remount ao navegar por link ("Limpar filtros") ou
-          voltar/avançar do navegador, senão o input/select ficam com o
-          valor antigo mesmo depois da URL e dos resultados mudarem. */}
-      <SearchBar key={`${filters.term}:${filters.brandId ?? ''}`} brands={brands} />
+      <div className="space-y-4">
+        {/* key força o remount ao navegar por link ("Limpar filtros") ou
+            voltar/avançar do navegador, senão o input/select ficam com o
+            valor antigo mesmo depois da URL e dos resultados mudarem. */}
+        <SearchBar key={`${filters.term}:${filters.brandId ?? ''}`} brands={brands} />
+
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-xs text-muted-foreground">Populares:</span>
+          {popularTerms.map((term) => (
+            <Link
+              key={term}
+              href={`/?q=${encodeURIComponent(term)}`}
+              className="rounded-full bg-[var(--color-neutral-100)] px-3 py-1 text-xs text-[var(--color-neutral-800)] transition-colors hover:bg-[var(--color-neutral-200)]"
+            >
+              {term}
+            </Link>
+          ))}
+        </div>
+      </div>
 
       {supplements.length === 0 ? (
-        <div className="rounded-md border border-dashed p-8 text-center">
-          <p className="text-muted-foreground">
+        <div className="flex flex-col items-start gap-3 rounded-[28px] bg-card px-8 py-10 shadow-sm sm:max-w-md">
+          <div className="size-16 rounded-full bg-accent-2/25" />
+          <h3 className="text-2xl">Nada por aqui</h3>
+          <p className="text-sm text-muted-foreground">
             {hasFilters
               ? 'Nenhum suplemento encontrado com esses filtros.'
               : 'Nenhum suplemento cadastrado ainda.'}
           </p>
           {hasFilters && (
-            <Link href="/" className="mt-2 inline-block text-sm underline">
+            <Link
+              href="/"
+              className="mt-1 inline-flex h-9 items-center rounded-full bg-primary px-5 font-heading text-sm text-primary-foreground hover:bg-[var(--color-accent-600)]"
+            >
               Limpar filtros
             </Link>
           )}
         </div>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {supplements.map((supplement) => (
-            <SupplementCard key={supplement.id} supplement={supplement} />
-          ))}
+        <div className="space-y-4">
+          <div className="flex items-baseline justify-between">
+            <h4 className="text-lg">
+              {supplements.length}{' '}
+              {supplements.length === 1 ? 'suplemento' : 'suplementos'}
+            </h4>
+          </div>
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {supplements.map((supplement) => (
+              <SupplementCard key={supplement.id} supplement={supplement} />
+            ))}
+          </div>
         </div>
       )}
-    </main>
+    </div>
   )
 }

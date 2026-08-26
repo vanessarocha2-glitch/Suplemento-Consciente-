@@ -28,16 +28,21 @@ export function SearchBar({ brands }: { brands: Category[] }) {
   }
 
   return (
-    <form action={submit} className="flex flex-col gap-3 sm:flex-row">
+    <form
+      action={submit}
+      className="flex flex-col gap-2 rounded-[28px] border border-border bg-card p-2 shadow-sm sm:flex-row sm:items-center sm:gap-1"
+    >
       <Input
         name="q"
         placeholder="Buscar suplemento pelo nome"
         defaultValue={searchParams.get('q') ?? ''}
-        className="flex-1"
+        className="h-11 flex-1 border-0 bg-transparent shadow-none focus-visible:ring-0"
       />
 
+      <span className="hidden h-[26px] w-px bg-border sm:block" />
+
       <Select name="brand" defaultValue={searchParams.get('brand') ?? 'all'}>
-        <SelectTrigger className="sm:w-56">
+        <SelectTrigger className="h-11 border-0 bg-transparent shadow-none sm:w-auto">
           <SelectValue placeholder="Todas as marcas" />
         </SelectTrigger>
         <SelectContent>
@@ -50,7 +55,9 @@ export function SearchBar({ brands }: { brands: Category[] }) {
         </SelectContent>
       </Select>
 
-      <Button type="submit">Buscar</Button>
+      <Button type="submit" className="h-11 px-7">
+        Buscar
+      </Button>
     </form>
   )
 }
