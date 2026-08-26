@@ -1,17 +1,5 @@
-import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
-import { logout } from './login/actions'
-import { Button } from '@/components/ui/button'
-
-const navItems = [
-  { href: '/admin/dashboard', label: 'Dashboard' },
-  { href: '/admin/brands', label: 'Marcas' },
-  { href: '/admin/ingredients', label: 'Ingredientes' },
-  { href: '/admin/alerts', label: 'Alertas' },
-  { href: '/admin/supplements', label: 'Suplementos' },
-  { href: '/admin/videos', label: 'Vídeos' },
-  { href: '/admin/quiz', label: 'Quiz' },
-]
+import { AdminSidebar } from '@/components/admin-sidebar'
 
 export default async function AdminLayout({
   children,
@@ -27,29 +15,9 @@ export default async function AdminLayout({
   if (!user) return <>{children}</>
 
   return (
-    <div className="min-h-screen">
-      <header className="border-b">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-4 p-4">
-          <span className="font-semibold">Suplemento Consciente</span>
-          <nav className="flex flex-wrap gap-4 text-sm">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="text-muted-foreground hover:text-foreground"
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-          <form action={logout} className="ml-auto">
-            <Button type="submit" variant="outline" size="sm">
-              Sair
-            </Button>
-          </form>
-        </div>
-      </header>
-      <main className="mx-auto max-w-6xl p-4">{children}</main>
+    <div className="flex min-h-screen">
+      <AdminSidebar />
+      <main className="min-w-0 flex-1 px-6 py-8 sm:px-10">{children}</main>
     </div>
   )
 }

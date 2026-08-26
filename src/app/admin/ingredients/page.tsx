@@ -28,6 +28,12 @@ export default async function IngredientsPage() {
       columns={columns}
       saveAction={saveIngredient}
       deleteAction={deleteIngredient}
+      createLabel="Novo ingrediente"
+      countLabel={`${ingredients.length} ${
+        ingredients.length === 1 ? 'ingrediente cadastrado' : 'ingredientes cadastrados'
+      }`}
+      emptyTitle="Nenhum ingrediente cadastrado"
+      emptyText="Cadastre o primeiro ingrediente para poder vinculá-lo aos suplementos e aos alertas de uso."
     />
   )
 }

@@ -34,6 +34,12 @@ export default async function AdminVideosPage() {
       columns={columns}
       saveAction={saveVideo}
       deleteAction={deleteVideo}
+      createLabel="Novo vídeo"
+      countLabel={`${videos.length} ${
+        videos.length === 1 ? 'vídeo cadastrado' : 'vídeos cadastrados'
+      }`}
+      emptyTitle="Nenhum vídeo cadastrado"
+      emptyText="Cadastre o primeiro vídeo para publicá-lo na biblioteca educativa."
     />
   )
 }

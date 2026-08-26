@@ -2,7 +2,7 @@ import { LoginForm } from './login-form'
 
 export default function LoginPage() {
   return (
-    <div className="mx-auto flex min-h-[calc(100vh-88px)] max-w-5xl items-center px-4 py-8 sm:px-8">
+    <div className="mx-auto flex min-h-screen max-w-5xl items-center px-4 py-8 sm:px-8">
       <div className="grid w-full overflow-hidden rounded-[32px] shadow-lg sm:grid-cols-2">
         <div className="hidden flex-col justify-between gap-10 bg-card p-11 sm:flex">
           <div className="flex items-center gap-2.5 font-heading text-lg">

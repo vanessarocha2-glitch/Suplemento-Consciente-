@@ -43,6 +43,12 @@ export default async function AdminQuizPage() {
       columns={columns}
       saveAction={saveQuizQuestion}
       deleteAction={deleteQuizQuestion}
+      createLabel="Nova pergunta"
+      countLabel={`${questions.length} ${
+        questions.length === 1 ? 'pergunta cadastrada' : 'perguntas cadastradas'
+      }`}
+      emptyTitle="Nenhuma pergunta cadastrada"
+      emptyText="Cadastre a primeira pergunta para liberar o quiz público."
     />
   )
 }

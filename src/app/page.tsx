@@ -35,7 +35,13 @@ export default async function HomePage({
             Veja ingredientes, finalidade, situação na Anvisa e alertas de uso.
           </p>
         </div>
-        <div className="hidden size-36 shrink-0 items-center justify-center justify-self-end rounded-full bg-accent-2/25 sm:flex" />
+        {/* imagem de apoio: composição de círculos sobrepostos */}
+        <div className="relative hidden h-[196px] w-[212px] shrink-0 justify-self-end sm:block">
+          <span className="absolute right-0 bottom-0 block size-[196px] rounded-full bg-[var(--color-accent-2-200)]" />
+          <span className="absolute right-24 bottom-[104px] block size-[104px] rounded-full bg-[var(--color-accent-200)]" />
+          <span className="absolute right-2 bottom-1.5 block size-[132px] rounded-full bg-[var(--color-accent-2-300)]" />
+          <span className="absolute right-[120px] bottom-3.5 block size-[46px] rounded-full bg-[var(--color-neutral-300)]" />
+        </div>
       </div>
 
       <div className="space-y-4">

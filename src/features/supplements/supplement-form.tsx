@@ -30,6 +30,9 @@ type Props = {
   saveAction: (formData: FormData) => Promise<ActionResult>
   onSaved: () => void
   supplement?: SupplementDetail | null
+  /** Substitui o botão de salvar padrão — usado pelo painel para alinhar
+      Salvar e Cancelar na mesma linha. */
+  footer?: React.ReactNode
 }
 
 export function SupplementForm({
@@ -39,6 +42,7 @@ export function SupplementForm({
   saveAction,
   onSaved,
   supplement,
+  footer,
 }: Props) {
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>(
     () => supplement?.ingredients.map((ingredient) => ingredient.id) ?? []
@@ -121,6 +125,7 @@ export function SupplementForm({
           name="purpose"
           defaultValue={supplement?.purpose ?? ''}
           required
+          className="rounded-[24px]"
         />
       </div>
 
@@ -131,6 +136,7 @@ export function SupplementForm({
           name="usage_instructions"
           defaultValue={supplement?.usage_instructions ?? ''}
           required
+          className="rounded-[24px]"
         />
       </div>
 
@@ -169,7 +175,7 @@ export function SupplementForm({
         />
       </div>
 
-      <fieldset className="space-y-3 rounded-md border p-4">
+      <fieldset className="space-y-3 rounded-[20px] border border-border/70 p-5">
         <legend className="px-1 text-sm font-medium">Ingredientes</legend>
         {ingredients.length === 0 && (
           <p className="text-sm text-muted-foreground">
@@ -206,7 +212,7 @@ export function SupplementForm({
         })}
       </fieldset>
 
-      <fieldset className="space-y-3 rounded-md border p-4">
+      <fieldset className="space-y-3 rounded-[20px] border border-border/70 p-5">
         <legend className="px-1 text-sm font-medium">Alertas</legend>
         {alerts.length === 0 && (
           <p className="text-sm text-muted-foreground">Nenhum alerta cadastrado.</p>
@@ -225,7 +231,7 @@ export function SupplementForm({
         ))}
       </fieldset>
 
-      <fieldset className="space-y-3 rounded-md border p-4">
+      <fieldset className="space-y-3 rounded-[20px] border border-border/70 p-5">
         <legend className="px-1 text-sm font-medium">Conformidade legislativa</legend>
 
         {claims.map((claim, index) => (
@@ -268,9 +274,11 @@ export function SupplementForm({
         </Button>
       </fieldset>
 
-      <Button type="submit" className="w-full">
-        Salvar suplemento
-      </Button>
+      {footer ?? (
+        <Button type="submit" className="w-full">
+          Salvar suplemento
+        </Button>
+      )}
     </form>
   )
 }

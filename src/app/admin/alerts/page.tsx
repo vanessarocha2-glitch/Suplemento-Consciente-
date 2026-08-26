@@ -33,6 +33,12 @@ export default async function AlertsPage() {
       columns={columns}
       saveAction={saveAlert}
       deleteAction={deleteAlert}
+      createLabel="Novo alerta"
+      countLabel={`${alerts.length} ${
+        alerts.length === 1 ? 'alerta cadastrado' : 'alertas cadastrados'
+      }`}
+      emptyTitle="Nenhum alerta cadastrado"
+      emptyText="Cadastre o primeiro alerta para exibi-lo nas páginas de suplemento."
     />
   )
 }

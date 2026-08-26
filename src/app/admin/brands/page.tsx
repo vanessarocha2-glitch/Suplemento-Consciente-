@@ -23,6 +23,12 @@ export default async function BrandsPage() {
       columns={columns}
       saveAction={saveBrand}
       deleteAction={deleteBrand}
+      createLabel="Nova marca"
+      countLabel={`${brands.length} ${
+        brands.length === 1 ? 'marca cadastrada' : 'marcas cadastradas'
+      }`}
+      emptyTitle="Nenhuma marca cadastrada"
+      emptyText="Cadastre a primeira marca para poder associá-la aos suplementos."
     />
   )
 }
