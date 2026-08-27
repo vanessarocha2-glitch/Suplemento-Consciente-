@@ -27,6 +27,7 @@ export async function saveSupplement(formData: FormData): Promise<ActionResult> 
     anvisa_registration: formData.get('anvisa_registration'),
     legislation_info: parseJsonField(formData.get('legislation_info'), []),
     image_url: formData.get('image_url'),
+    nutrition_table_url: formData.get('nutrition_table_url'),
     ingredient_ids: parseJsonField<string[]>(formData.get('ingredient_ids'), []),
     alert_ids: parseJsonField<string[]>(formData.get('alert_ids'), []),
   })

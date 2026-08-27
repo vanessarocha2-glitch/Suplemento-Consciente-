@@ -26,7 +26,9 @@ export async function searchSupplements(
 
   let query = supabase
     .from('supplements')
-    .select('id, name, image_url, anvisa_status, category:categories(id, name)')
+    .select(
+      'id, name, image_url, nutrition_table_url, anvisa_status, category:categories(id, name)'
+    )
     .order('name')
 
   if (filters.term) {

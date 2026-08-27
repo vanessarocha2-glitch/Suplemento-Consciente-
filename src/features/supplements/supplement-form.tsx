@@ -165,14 +165,26 @@ export function SupplementForm({
         </div>
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="image_url">URL da imagem</Label>
-        <Input
-          id="image_url"
-          name="image_url"
-          type="url"
-          defaultValue={supplement?.image_url ?? ''}
-        />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-2">
+          <Label htmlFor="image_url">URL da foto do produto</Label>
+          <Input
+            id="image_url"
+            name="image_url"
+            type="url"
+            defaultValue={supplement?.image_url ?? ''}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="nutrition_table_url">URL da tabela nutricional</Label>
+          <Input
+            id="nutrition_table_url"
+            name="nutrition_table_url"
+            type="url"
+            defaultValue={supplement?.nutrition_table_url ?? ''}
+          />
+        </div>
       </div>
 
       <fieldset className="space-y-3 rounded-[20px] border border-border/70 p-5">

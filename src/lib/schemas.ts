@@ -49,6 +49,7 @@ export const supplementSchema = z.object({
   anvisa_registration: optionalText,
   legislation_info: z.array(legislationClaimSchema).default([]),
   image_url: optionalText,
+  nutrition_table_url: optionalText,
   ingredient_ids: z.array(z.uuid('Selecione um ingrediente válido')).default([]),
   alert_ids: z.array(z.uuid('Selecione um alerta válido')).default([]),
 })

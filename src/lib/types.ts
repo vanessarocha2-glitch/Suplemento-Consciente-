@@ -39,6 +39,7 @@ export type Supplement = {
   anvisa_registration: string | null
   legislation_info: LegislationClaim[]
   image_url: string | null
+  nutrition_table_url: string | null
   created_at: string
   updated_at: string
 }
@@ -46,7 +47,7 @@ export type Supplement = {
 /** Suplemento na listagem da home — só o necessário para o card. */
 export type SupplementListItem = Pick<
   Supplement,
-  'id' | 'name' | 'image_url' | 'anvisa_status'
+  'id' | 'name' | 'image_url' | 'nutrition_table_url' | 'anvisa_status'
 > & {
   category: Pick<Category, 'id' | 'name'> | null
 }

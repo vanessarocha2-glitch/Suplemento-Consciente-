@@ -33,20 +33,39 @@ export default async function SupplementPage({
               className="mt-3"
             />
           </div>
-          <div className="aspect-[3/4] overflow-hidden rounded-[20px] bg-[var(--color-neutral-200)]">
-            {supplement.image_url ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={supplement.image_url}
-                alt={supplement.name}
-                className="size-full object-cover [filter:saturate(0.6)_contrast(0.85)_brightness(1.1)]"
-              />
-            ) : (
-              <div className="flex size-full items-center justify-center bg-[repeating-linear-gradient(135deg,var(--color-neutral-200)_0_9px,var(--color-neutral-300)_9px_18px)]">
-                <span className="text-[10px] text-[var(--color-neutral-800)]">
-                  sem foto
+          <div className="space-y-4">
+            <div className="aspect-[3/4] overflow-hidden rounded-[20px] bg-[var(--color-neutral-100)]">
+              {supplement.image_url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={supplement.image_url}
+                  alt={supplement.name}
+                  className="size-full object-cover [filter:saturate(0.6)_contrast(0.85)_brightness(1.1)]"
+                />
+              ) : (
+                <div className="flex size-full items-center justify-center">
+                  <span className="text-[10px] text-muted-foreground">
+                    sem foto
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {supplement.nutrition_table_url && (
+              <figure>
+                <span className="text-[11px] tracking-[0.1em] text-primary uppercase">
+                  Tabela nutricional
                 </span>
-              </div>
+                <div className="mt-1.5 overflow-hidden rounded-[16px] bg-[var(--color-neutral-100)]">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={supplement.nutrition_table_url}
+                    alt={`Tabela nutricional de ${supplement.name}`}
+                    loading="lazy"
+                    className="w-full object-contain"
+                  />
+                </div>
+              </figure>
             )}
           </div>
         </div>

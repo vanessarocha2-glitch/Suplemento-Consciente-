@@ -66,6 +66,7 @@ describe('supplementSchema', () => {
     anvisa_registration: '6.1234.5678',
     legislation_info: [],
     image_url: '',
+    nutrition_table_url: '',
     ingredient_ids: [],
     alert_ids: [],
   }
@@ -90,6 +91,19 @@ describe('supplementSchema', () => {
   it('converte image_url vazia em null', () => {
     const result = supplementSchema.parse(valido)
     expect(result.image_url).toBeNull()
+  })
+
+  it('converte nutrition_table_url vazia em null', () => {
+    const result = supplementSchema.parse(valido)
+    expect(result.nutrition_table_url).toBeNull()
+  })
+
+  it('mantem a nutrition_table_url quando preenchida', () => {
+    const result = supplementSchema.parse({
+      ...valido,
+      nutrition_table_url: 'https://exemplo.com/tabela.png',
+    })
+    expect(result.nutrition_table_url).toBe('https://exemplo.com/tabela.png')
   })
 
   it('aceita alegacoes de legislacao', () => {
