@@ -11,10 +11,12 @@ Suplementos como whey protein, creatina e vitaminas são vendidos em grande quan
 Ao buscar um suplemento pelo nome, ou filtrar por marca, você vê:
 
 - **Ingredientes** explicados de forma simples — o que são e para que servem
+- **Tabela nutricional** detalhada com porções e composição
 - **Para que serve o produto** e **como usar**
 - **Situação na Anvisa** — se está regularizado, em análise ou não localizado
 - **Conformidade com a legislação** — quais promessas do rótulo são ou não permitidas, e por quê
 - **Alertas de uso** — avisos importantes, com atenção especial para adolescentes e para o uso sem orientação de um profissional de saúde
+- **Avaliações da comunidade** — notas de 1 a 5 estrelas e comentários de usuários reais
 
 ## Conteúdo educativo
 
@@ -24,3 +26,4 @@ Ao buscar um suplemento pelo nome, ou filtrar por marca, você vê:
 ## Como o conteúdo é mantido
 
 As informações são cadastradas e revisadas por um administrador responsável, garantindo que o conteúdo apresentado seja confiável.
+
