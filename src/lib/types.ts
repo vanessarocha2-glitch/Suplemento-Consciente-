@@ -100,3 +100,12 @@ export type SubmittedScore = {
   /** Mapa question_id -> resposta correta, devolvido só depois da nota já estar gravada. */
   answer_key: Record<string, string>
 }
+
+export type SupplementComment = {
+  id: string
+  supplement_id: string
+  author_name: string
+  rating: number
+  comment_text: string
+  created_at: string
+}
