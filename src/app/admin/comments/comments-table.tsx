@@ -58,6 +58,9 @@ export function CommentsTable({ comments }: { comments: AdminComment[] }) {
                 <th className="py-2.5 pr-2 text-left text-[11px] font-medium tracking-[0.08em] text-muted-foreground uppercase">
                   Comentário
                 </th>
+                <th className="w-[110px] py-2.5 pr-2 text-left text-[11px] font-medium tracking-[0.08em] text-muted-foreground uppercase">
+                  Data
+                </th>
                 <th className="w-[100px] py-2.5 pr-4 text-right text-[11px] font-medium tracking-[0.08em] text-muted-foreground uppercase">
                   Ações
                 </th>
@@ -78,8 +81,11 @@ export function CommentsTable({ comments }: { comments: AdminComment[] }) {
                   <td className="py-3 pr-2 text-muted-foreground">
                     {row.rating}/5
                   </td>
-                  <td className="truncate py-3 pr-2 text-muted-foreground">
+                  <td className="truncate py-3 pr-2 text-muted-foreground" title={row.comment_text}>
                     {row.comment_text}
+                  </td>
+                  <td className="py-3 pr-2 text-muted-foreground">
+                    {new Date(row.created_at).toLocaleDateString('pt-BR')}
                   </td>
                   <td className="py-3 pr-3 text-right whitespace-nowrap">
                     <GhostAction onClick={() => handleDelete(row.id)}>
