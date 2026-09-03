@@ -37,7 +37,7 @@ Full design and rationale: `docs/superpowers/specs/2026-09-03-supplement-comment
 
 **Files:** none
 
-- [ ] **Step 1: Create and switch to a feature branch**
+- [x] **Step 1: Create and switch to a feature branch**
 
 Run: `git checkout -b feature/supplement-comments`
 Expected: `Switched to a new branch 'feature/supplement-comments'`
@@ -51,7 +51,7 @@ This repo belongs to another GitHub account (`vanessarocha2-glitch`); work happe
 **Files:**
 - Create: `supabase/migrations/0005_supplement_comments.sql`
 
-- [ ] **Step 1: Write the migration**
+- [x] **Step 1: Write the migration**
 
 ```sql
 -- Avaliação (1-5 estrelas) e comentário escrito por visitante, sem conta.
@@ -86,7 +86,7 @@ create policy "escrita admin" on supplement_comments
   for delete to authenticated using (true);
 ```
 
-- [ ] **Step 2: Commit**
+- [x] **Step 2: Commit**
 
 ```bash
 git add supabase/migrations/0005_supplement_comments.sql
@@ -100,7 +100,7 @@ git commit -m "feat: adicionar tabela de comentarios e avaliacao de suplementos"
 **Files:**
 - Modify: `src/lib/types.ts`
 
-- [ ] **Step 1: Add the type**
+- [x] **Step 1: Add the type**
 
 Add at the end of `src/lib/types.ts`:
 
@@ -115,12 +115,12 @@ export type SupplementComment = {
 }
 ```
 
-- [ ] **Step 2: Verify it compiles**
+- [x] **Step 2: Verify it compiles**
 
 Run: `pnpm exec tsc --noEmit`
 Expected: no new errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/lib/types.ts
@@ -135,7 +135,7 @@ git commit -m "feat: adicionar tipo SupplementComment"
 - Modify: `src/lib/schemas.ts`
 - Test: `src/lib/schemas.test.ts`
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 Add to `src/lib/schemas.test.ts`, alongside the other imports at the top add `commentSchema`:
 
@@ -222,12 +222,12 @@ describe('commentSchema', () => {
 })
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail**
 
 Run: `pnpm test src/lib/schemas.test.ts`
 Expected: FAIL — `commentSchema` is not exported from `./schemas`.
 
-- [ ] **Step 3: Implement `commentSchema`**
+- [x] **Step 3: Implement `commentSchema`**
 
 Add to `src/lib/schemas.ts`, after `quizQuestionSchema`:
 
@@ -257,12 +257,12 @@ And add its inferred type alongside the other `export type ... = z.infer<...>` l
 export type CommentInput = z.infer<typeof commentSchema>
 ```
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass**
 
 Run: `pnpm test src/lib/schemas.test.ts`
 Expected: PASS, all tests including the new `commentSchema` block.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/lib/schemas.ts src/lib/schemas.test.ts
@@ -276,7 +276,7 @@ git commit -m "feat: adicionar commentSchema com validacao de nota e tamanho"
 **Files:**
 - Create: `src/features/comments/queries.ts`
 
-- [ ] **Step 1: Write the queries**
+- [x] **Step 1: Write the queries**
 
 ```ts
 import { createClient } from '@/lib/supabase/server'
@@ -335,12 +335,12 @@ export async function listAllComments(): Promise<AdminComment[]> {
 }
 ```
 
-- [ ] **Step 2: Verify it compiles**
+- [x] **Step 2: Verify it compiles**
 
 Run: `pnpm exec tsc --noEmit`
 Expected: no new errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/features/comments/queries.ts
@@ -354,7 +354,7 @@ git commit -m "feat: adicionar queries de comentarios de suplementos"
 **Files:**
 - Create: `src/features/comments/actions.ts`
 
-- [ ] **Step 1: Write the actions**
+- [x] **Step 1: Write the actions**
 
 ```ts
 'use server'
@@ -409,12 +409,12 @@ export async function deleteComment(formData: FormData): Promise<ActionResult> {
 }
 ```
 
-- [ ] **Step 2: Verify it compiles**
+- [x] **Step 2: Verify it compiles**
 
 Run: `pnpm exec tsc --noEmit`
 Expected: no new errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/features/comments/actions.ts
@@ -430,7 +430,7 @@ git commit -m "feat: adicionar actions de envio e exclusao de comentarios"
 
 The project pins `shadcn@^4.18.0` and normally adds components via `pnpm dlx shadcn add tabs`, but that CLI call is interactive/network-dependent. Writing the file directly below is the same output shadcn would generate for this project's config (`new-york` style, `radix-ui` unified import, `data-slot` convention — matches `src/components/ui/dialog.tsx`), adapted to the "Organic" pill styling already used for tab-like controls (compare `AdminSidebar`'s nav pills).
 
-- [ ] **Step 1: Write the component**
+- [x] **Step 1: Write the component**
 
 ```tsx
 "use client"
@@ -501,12 +501,12 @@ function TabsContent({
 export { Tabs, TabsList, TabsTrigger, TabsContent }
 ```
 
-- [ ] **Step 2: Verify it compiles**
+- [x] **Step 2: Verify it compiles**
 
 Run: `pnpm exec tsc --noEmit`
 Expected: no new errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/ui/tabs.tsx
@@ -522,7 +522,7 @@ git commit -m "feat: adicionar componente Tabs (radix-ui, estilo Organic)"
 
 Mirrors `src/features/quiz/ranking.tsx`: a pure presentational component, no data fetching.
 
-- [ ] **Step 1: Write the component**
+- [x] **Step 1: Write the component**
 
 ```tsx
 import { Star } from 'lucide-react'
@@ -594,12 +594,12 @@ export function CommentList({
 }
 ```
 
-- [ ] **Step 2: Verify it compiles**
+- [x] **Step 2: Verify it compiles**
 
 Run: `pnpm exec tsc --noEmit`
 Expected: no new errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/features/comments/comment-list.tsx
@@ -616,7 +616,7 @@ git commit -m "feat: adicionar componente de listagem de comentarios"
 
 Mirrors the client-state and error-handling pattern of `src/features/quiz/quiz-runner.tsx`, and the mocked-server-action test pattern of `src/features/quiz/quiz-runner.test.tsx`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 ```tsx
 import '@testing-library/jest-dom/vitest'
@@ -690,12 +690,12 @@ describe('CommentForm', () => {
 })
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail**
 
 Run: `pnpm test src/features/comments/comment-form.test.tsx`
 Expected: FAIL — cannot find module `./comment-form`.
 
-- [ ] **Step 3: Write the component**
+- [x] **Step 3: Write the component**
 
 ```tsx
 'use client'
@@ -797,12 +797,12 @@ export function CommentForm({ supplementId }: { supplementId: string }) {
 }
 ```
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass**
 
 Run: `pnpm test src/features/comments/comment-form.test.tsx`
 Expected: PASS, all three tests.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/features/comments/comment-form.tsx src/features/comments/comment-form.test.tsx
@@ -816,7 +816,7 @@ git commit -m "feat: adicionar formulario de comentario com nota em estrelas"
 **Files:**
 - Modify: `src/app/supplements/[id]/page.tsx`
 
-- [ ] **Step 1: Fetch comments and restructure the page in tabs**
+- [x] **Step 1: Fetch comments and restructure the page in tabs**
 
 Replace the full contents of `src/app/supplements/[id]/page.tsx` with:
 
@@ -1022,21 +1022,21 @@ export default async function SupplementPage({
 }
 ```
 
-- [ ] **Step 2: Run the full test suite**
+- [x] **Step 2: Run the full test suite**
 
 Run: `pnpm test`
 Expected: PASS, no regressions.
 
-- [ ] **Step 3: Verify it compiles**
+- [x] **Step 3: Verify it compiles**
 
 Run: `pnpm exec tsc --noEmit`
 Expected: no new errors.
 
-- [ ] **Step 4: Manual check in the browser**
+- [x] **Step 4: Manual check in the browser**
 
 Run: `pnpm dev`, open `http://localhost:3000`, click into any supplement, confirm both tabs render, "Comentários" shows the form and the empty-state message ("Ninguém avaliou ainda...").
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/app/supplements/[id]/page.tsx
@@ -1054,7 +1054,7 @@ git commit -m "feat: reestruturar pagina de detalhe do suplemento em abas com co
 
 This is read-only + delete, so it does not reuse `CrudManager` (built for editable entities with a create/edit dialog). It follows the same table/pill styling as `CrudManager`'s own table and `GhostAction`.
 
-- [ ] **Step 1: Write the comments table component**
+- [x] **Step 1: Write the comments table component**
 
 Create `src/app/admin/comments/comments-table.tsx` (colocated with the page below since it's only used there, unlike the shared `src/features/comments/` files):
 
@@ -1158,7 +1158,7 @@ export function CommentsTable({ comments }: { comments: AdminComment[] }) {
 }
 ```
 
-- [ ] **Step 2: Write the page that fetches and renders it**
+- [x] **Step 2: Write the page that fetches and renders it**
 
 Create `src/app/admin/comments/page.tsx`:
 
@@ -1172,7 +1172,7 @@ export default async function AdminCommentsPage() {
 }
 ```
 
-- [ ] **Step 3: Add the sidebar nav item**
+- [x] **Step 3: Add the sidebar nav item**
 
 In `src/components/admin-sidebar.tsx`, modify the `navItems` array:
 
@@ -1189,16 +1189,16 @@ const navItems = [
 ]
 ```
 
-- [ ] **Step 4: Verify it compiles**
+- [x] **Step 4: Verify it compiles**
 
 Run: `pnpm exec tsc --noEmit`
 Expected: no new errors.
 
-- [ ] **Step 5: Manual check in the browser**
+- [x] **Step 5: Manual check in the browser**
 
 Run: `pnpm dev`, log into `/admin/login`, open `/admin/comments`, confirm the "Comentários" sidebar link works and the empty-state message shows.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/app/admin/comments src/components/admin-sidebar.tsx
