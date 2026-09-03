@@ -21,7 +21,7 @@ describe('CommentForm', () => {
     fireEvent.change(screen.getByLabelText('Seu apelido'), {
       target: { value: 'Ana' },
     })
-    fireEvent.click(screen.getByRole('button', { name: '4 estrelas' }))
+    fireEvent.click(screen.getByRole('radio', { name: '4 estrelas' }))
     fireEvent.change(screen.getByLabelText('Seu comentário'), {
       target: { value: 'Gostei bastante do sabor.' },
     })
@@ -42,14 +42,17 @@ describe('CommentForm', () => {
     render(<CommentForm supplementId="supp-1" />)
 
     const nameInput = screen.getByLabelText('Seu apelido') as HTMLInputElement
+    const commentInput = screen.getByLabelText('Seu comentário') as HTMLTextAreaElement
     fireEvent.change(nameInput, { target: { value: 'Ana' } })
-    fireEvent.click(screen.getByRole('button', { name: '4 estrelas' }))
-    fireEvent.change(screen.getByLabelText('Seu comentário'), {
+    fireEvent.click(screen.getByRole('radio', { name: '4 estrelas' }))
+    fireEvent.change(commentInput, {
       target: { value: 'Gostei bastante do sabor.' },
     })
     fireEvent.click(screen.getByRole('button', { name: 'Enviar avaliação' }))
 
     await waitFor(() => expect(nameInput.value).toBe(''))
+    expect(commentInput.value).toBe('')
+    expect(screen.queryByRole('radio', { checked: true })).toBeNull()
   })
 
   it('mostra o erro do servidor e mantem o texto digitado', async () => {
@@ -59,11 +62,15 @@ describe('CommentForm', () => {
 
     const nameInput = screen.getByLabelText('Seu apelido') as HTMLInputElement
     fireEvent.change(nameInput, { target: { value: 'Ana' } })
-    fireEvent.click(screen.getByRole('button', { name: '4 estrelas' }))
+    fireEvent.click(screen.getByRole('radio', { name: '4 estrelas' }))
     fireEvent.click(screen.getByRole('button', { name: 'Enviar avaliação' }))
 
     const alert = await screen.findByRole('alert')
     expect(alert).toHaveTextContent('Escreva um comentário')
     expect(nameInput.value).toBe('Ana')
+    expect(screen.getByRole('radio', { name: '4 estrelas' })).toHaveAttribute(
+      'aria-checked',
+      'true'
+    )
   })
 })

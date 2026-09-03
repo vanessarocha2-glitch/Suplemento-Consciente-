@@ -48,13 +48,14 @@ export function CommentForm({ supplementId }: { supplementId: string }) {
       <div className="space-y-1.5">
         <Label id="rating-label">Sua nota</Label>
         <input type="hidden" name="rating" value={rating} />
-        <div role="group" aria-labelledby="rating-label" className="flex gap-1">
+        <div role="radiogroup" aria-labelledby="rating-label" className="flex gap-1">
           {[1, 2, 3, 4, 5].map((value) => (
             <button
               key={value}
               type="button"
+              role="radio"
               aria-label={`${value} ${value === 1 ? 'estrela' : 'estrelas'}`}
-              aria-pressed={rating >= value}
+              aria-checked={rating === value}
               onClick={() => setRating(value)}
               className="cursor-pointer p-0.5"
             >
