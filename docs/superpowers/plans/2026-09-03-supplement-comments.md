@@ -1213,11 +1213,11 @@ git commit -m "feat: adicionar painel admin de moderacao de comentarios"
 
 This project's Supabase database only accepts direct connections over IPv6, which isn't available on this machine — prior migrations were applied through the session pooler via `psql`. This requires the database password, which must **never** be pasted into a file in the repo.
 
-- [ ] **Step 1: Confirm with the user before running anything**
+- [x] **Step 1: Confirm with the user before running anything**
 
 Stop and ask the user for explicit go-ahead plus the pooler connection string (or password) for this specific run — do not reuse a previously-seen password from memory/history. This project isn't owned by the person driving this session, so credentials must come from them fresh each time.
 
-- [ ] **Step 2: Apply the migration**
+- [x] **Step 2: Apply the migration**
 
 Run (with `$DATABASE_URL` set to the session-pooler connection string provided by the user, e.g. `postgresql://postgres.<project-ref>:<password>@aws-0-us-east-2.pooler.supabase.com:5432/postgres`):
 
@@ -1227,7 +1227,7 @@ psql "$DATABASE_URL" -f supabase/migrations/0005_supplement_comments.sql
 
 Expected: `CREATE TABLE`, `CREATE INDEX`, `ALTER TABLE`, and three `CREATE POLICY` confirmations, no errors.
 
-- [ ] **Step 3: Verify RLS from the app**
+- [x] **Step 3: Verify RLS from the app** — schema/policies confirmed via `pg_policies` + `\d`; app-level visitor submit/delete flow left for the user to smoke-test.
 
 With `.env.local` filled in (copy from `.env.local.example`, using the project's `NEXT_PUBLIC_SUPABASE_URL`/`NEXT_PUBLIC_SUPABASE_ANON_KEY`), run `pnpm dev`, open a supplement page, submit a comment as a visitor (no login) and confirm it appears in the list; then confirm it also appears (and can be deleted) in `/admin/comments` while logged in.
 
@@ -1237,11 +1237,11 @@ With `.env.local` filled in (copy from `.env.local.example`, using the project's
 
 **Files:** none
 
-- [ ] **Step 1: Push the branch**
+- [x] **Step 1: Push the branch**
 
 Run: `git push -u origin feature/supplement-comments`
 
-- [ ] **Step 2: Open a PR**
+- [x] **Step 2: Open a PR** — PR #1 aberto: "feat: comentários e avaliação de suplementos"
 
 Run:
 ```bash
