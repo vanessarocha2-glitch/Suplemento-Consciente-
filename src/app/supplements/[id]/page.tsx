@@ -184,7 +184,7 @@ export default async function SupplementPage({
           )}
         </TabsContent>
 
-        <TabsContent value="comments" className="space-y-6">
+        <TabsContent value="comments" className="space-y-6" forceMount>
           <CommentForm supplementId={supplement.id} />
           <CommentList comments={comments} average={average} count={count} />
         </TabsContent>
