@@ -78,9 +78,28 @@ export const quizQuestionSchema = z
     path: ['correct_answer'],
   })
 
+export const commentSchema = z.object({
+  author_name: z
+    .string()
+    .trim()
+    .min(1, 'Informe seu apelido')
+    .max(40, 'Apelido muito longo'),
+  rating: z.coerce
+    .number()
+    .int()
+    .min(1, 'Selecione uma nota de 1 a 5 estrelas')
+    .max(5, 'Selecione uma nota de 1 a 5 estrelas'),
+  comment_text: z
+    .string()
+    .trim()
+    .min(1, 'Escreva um comentário')
+    .max(1000, 'Comentário muito longo'),
+})
+
 export type CategoryInput = z.infer<typeof categorySchema>
 export type IngredientInput = z.infer<typeof ingredientSchema>
 export type AlertInput = z.infer<typeof alertSchema>
 export type SupplementInput = z.infer<typeof supplementSchema>
 export type VideoInput = z.infer<typeof videoSchema>
 export type QuizQuestionInput = z.infer<typeof quizQuestionSchema>
+export type CommentInput = z.infer<typeof commentSchema>
