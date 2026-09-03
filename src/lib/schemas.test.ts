@@ -7,6 +7,7 @@ import {
   quizQuestionSchema,
   legislationClaimSchema,
   videoSchema,
+  commentSchema,
 } from './schemas'
 
 describe('categorySchema', () => {
@@ -204,5 +205,71 @@ describe('videoSchema', () => {
       video_url: 'data:text/html,<script>alert(1)</script>',
     })
     expect(result.success).toBe(false)
+  })
+})
+
+describe('commentSchema', () => {
+  const valido = {
+    author_name: 'Ana',
+    rating: '5',
+    comment_text: 'Gostei bastante, senti diferença no treino.',
+  }
+
+  it('aceita um comentario valido', () => {
+    expect(commentSchema.safeParse(valido).success).toBe(true)
+  })
+
+  it('rejeita apelido vazio', () => {
+    const result = commentSchema.safeParse({ ...valido, author_name: '  ' })
+    expect(result.success).toBe(false)
+  })
+
+  it('rejeita apelido com mais de 40 caracteres', () => {
+    const result = commentSchema.safeParse({
+      ...valido,
+      author_name: 'a'.repeat(41),
+    })
+    expect(result.success).toBe(false)
+  })
+
+  it('rejeita nota zero', () => {
+    const result = commentSchema.safeParse({ ...valido, rating: '0' })
+    expect(result.success).toBe(false)
+    expect(result.success ? undefined : result.error.issues[0].message).toBe(
+      'Selecione uma nota de 1 a 5 estrelas'
+    )
+  })
+
+  it('rejeita nota maior que 5', () => {
+    const result = commentSchema.safeParse({ ...valido, rating: '6' })
+    expect(result.success).toBe(false)
+  })
+
+  it('converte a nota de string para numero', () => {
+    const result = commentSchema.parse(valido)
+    expect(result.rating).toBe(5)
+  })
+
+  it('rejeita comentario vazio', () => {
+    const result = commentSchema.safeParse({ ...valido, comment_text: '  ' })
+    expect(result.success).toBe(false)
+  })
+
+  it('rejeita comentario com mais de 1000 caracteres', () => {
+    const result = commentSchema.safeParse({
+      ...valido,
+      comment_text: 'a'.repeat(1001),
+    })
+    expect(result.success).toBe(false)
+  })
+
+  it('remove espacos em volta do apelido e do comentario', () => {
+    const result = commentSchema.parse({
+      ...valido,
+      author_name: '  Ana  ',
+      comment_text: '  Gostei  ',
+    })
+    expect(result.author_name).toBe('Ana')
+    expect(result.comment_text).toBe('Gostei')
   })
 })
