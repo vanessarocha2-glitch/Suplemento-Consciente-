@@ -12,6 +12,7 @@ const navItems = [
   { href: '/admin/supplements', label: 'Suplementos' },
   { href: '/admin/videos', label: 'Vídeos' },
   { href: '/admin/quiz', label: 'Quiz' },
+  { href: '/admin/comments', label: 'Comentários' },
 ]
 
 export function AdminSidebar() {
