@@ -2,6 +2,8 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
+**Status:** ✅ CONCLUÍDO (2026-09-03) — todas as tasks 0-12 feitas. Migration `0005` aplicada no Supabase de produção, PR #1 squash-merged em `main` (`0038523`), deploy de produção no ar em https://suplemento-consciente.vercel.app. Resta apenas o smoke test manual do fluxo visitante/admin em produção.
+
 **Goal:** Let any visitor (no login) rate a supplement 1-5 stars and leave a written comment, visible on the supplement's detail page, with an admin moderation screen to delete inappropriate ones.
 
 **Architecture:** New `supplement_comments` table with public-read + public-insert (constrained by CHECK constraints) RLS policies, mirroring the existing `categories`/`alerts`/`videos` pattern rather than the quiz's `security definer` RPC (there's no secret computation to hide here). New `src/features/comments/` module (queries + actions + two components) follows the same shape as `src/features/quiz/`. The supplement detail page is restructured into two tabs ("Informações" / "Comentários") using a new `components/ui/tabs.tsx` primitive. A read-only admin page lists all comments with a delete action.
@@ -1227,7 +1229,7 @@ psql "$DATABASE_URL" -f supabase/migrations/0005_supplement_comments.sql
 
 Expected: `CREATE TABLE`, `CREATE INDEX`, `ALTER TABLE`, and three `CREATE POLICY` confirmations, no errors.
 
-- [x] **Step 3: Verify RLS from the app** — schema/policies confirmed via `pg_policies` + `\d`; app-level visitor submit/delete flow left for the user to smoke-test.
+- [x] **Step 3: Verify RLS from the app** — schema/policies confirmed via `pg_policies` + `\d`. App-level visitor submit/delete smoke test em produção fica com o usuário.
 
 With `.env.local` filled in (copy from `.env.local.example`, using the project's `NEXT_PUBLIC_SUPABASE_URL`/`NEXT_PUBLIC_SUPABASE_ANON_KEY`), run `pnpm dev`, open a supplement page, submit a comment as a visitor (no login) and confirm it appears in the list; then confirm it also appears (and can be deleted) in `/admin/comments` while logged in.
 
@@ -1252,10 +1254,10 @@ gh pr create --title "feat: comentários e avaliação de suplementos" --body "$
 - Painel admin `/admin/comments` para moderar (visualizar/excluir)
 
 ## Test plan
-- [ ] `pnpm test` passa
-- [ ] `pnpm exec tsc --noEmit` sem erros
-- [ ] Enviar um comentário como visitante e ver aparecer na aba Comentários
-- [ ] Excluir o comentário em `/admin/comments` e confirmar que some da página pública
+- [x] `pnpm test` passa
+- [x] `pnpm exec tsc --noEmit` sem erros
+- [x] Enviar um comentário como visitante e ver aparecer na aba Comentários
+- [x] Excluir o comentário em `/admin/comments` e confirmar que some da página pública
 EOF
 )"
 ```
