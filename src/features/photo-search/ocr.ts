@@ -1,5 +1,8 @@
 // Versão pinada — os paths abaixo apontam pro CDN nessa mesma versão,
 // evitando que o Next/Turbopack tente empacotar o worker/wasm do Tesseract.
+// ATENÇÃO: precisa ficar em sincronia com a versão exata de "tesseract.js"
+// em package.json — se uma atualizar sem a outra, o worker/core baixados
+// do CDN ficam de uma versão diferente do wrapper JS instalado localmente.
 const TESSERACT_VERSION = '7.0.0'
 
 /**
