@@ -9,7 +9,13 @@ import { Button } from '@/components/ui/button'
 import { readLabelText } from './ocr'
 import { buildQueryFromLabel, type CatalogEntry } from './match'
 
-export function PhotoSearchButton({ catalog }: { catalog: CatalogEntry[] }) {
+export function PhotoSearchButton({
+  catalog,
+  onReadingChange,
+}: {
+  catalog: CatalogEntry[]
+  onReadingChange?: (reading: boolean) => void
+}) {
   const router = useRouter()
   const inputRef = useRef<HTMLInputElement>(null)
   const [reading, setReading] = useState(false)
@@ -20,6 +26,7 @@ export function PhotoSearchButton({ catalog }: { catalog: CatalogEntry[] }) {
     if (!file) return
 
     setReading(true)
+    onReadingChange?.(true)
     try {
       const text = await readLabelText(file)
       const { q, brandId } = buildQueryFromLabel(text, catalog)
@@ -30,6 +37,7 @@ export function PhotoSearchButton({ catalog }: { catalog: CatalogEntry[] }) {
       toast.error('Não foi possível ler a foto. Tente novamente.')
     } finally {
       setReading(false)
+      onReadingChange?.(false)
     }
   }
 

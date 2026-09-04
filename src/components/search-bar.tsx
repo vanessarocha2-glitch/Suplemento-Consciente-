@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -23,6 +24,7 @@ export function SearchBar({
 }) {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const [reading, setReading] = useState(false)
 
   function submit(formData: FormData) {
     const params = new URLSearchParams()
@@ -40,11 +42,12 @@ export function SearchBar({
       action={submit}
       className="flex flex-col gap-2 rounded-[28px] border border-border bg-card p-2 shadow-sm sm:flex-row sm:items-center sm:gap-1"
     >
-      <PhotoSearchButton catalog={catalog} />
+      <PhotoSearchButton catalog={catalog} onReadingChange={setReading} />
 
       <Input
         name="q"
-        placeholder="Buscar suplemento pelo nome"
+        placeholder={reading ? 'Lendo o rótulo…' : 'Buscar suplemento pelo nome'}
+        disabled={reading}
         defaultValue={searchParams.get('q') ?? ''}
         className="h-11 flex-1 border-0 bg-transparent shadow-none focus-visible:ring-0"
       />

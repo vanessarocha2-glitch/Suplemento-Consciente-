@@ -84,4 +84,26 @@ describe('PhotoSearchButton', () => {
     expect(readLabelText).not.toHaveBeenCalled()
     expect(push).not.toHaveBeenCalled()
   })
+
+  it('avisa o pai quando o estado de leitura muda', async () => {
+    let resolveOcr: (text: string) => void = () => {}
+    vi.mocked(readLabelText).mockReturnValue(
+      new Promise((resolve) => {
+        resolveOcr = resolve
+      })
+    )
+    const onReadingChange = vi.fn()
+
+    render(<PhotoSearchButton catalog={catalog} onReadingChange={onReadingChange} />)
+
+    selectPhoto(new File(['foto'], 'rotulo.jpg', { type: 'image/jpeg' }))
+
+    expect(onReadingChange).toHaveBeenNthCalledWith(1, true)
+
+    await act(async () => {
+      resolveOcr('GROWTH CREATINA MONOHIDRATADA')
+    })
+
+    await waitFor(() => expect(onReadingChange).toHaveBeenNthCalledWith(2, false))
+  })
 })
