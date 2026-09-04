@@ -10,9 +10,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { PhotoSearchButton } from '@/features/photo-search/photo-search-button'
+import type { CatalogEntry } from '@/features/photo-search/match'
 import type { Category } from '@/lib/types'
 
-export function SearchBar({ brands }: { brands: Category[] }) {
+export function SearchBar({
+  brands,
+  catalog,
+}: {
+  brands: Category[]
+  catalog: CatalogEntry[]
+}) {
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -32,6 +40,8 @@ export function SearchBar({ brands }: { brands: Category[] }) {
       action={submit}
       className="flex flex-col gap-2 rounded-[28px] border border-border bg-card p-2 shadow-sm sm:flex-row sm:items-center sm:gap-1"
     >
+      <PhotoSearchButton catalog={catalog} />
+
       <Input
         name="q"
         placeholder="Buscar suplemento pelo nome"

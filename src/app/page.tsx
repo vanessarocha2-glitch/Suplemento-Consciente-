@@ -4,6 +4,7 @@ import { SupplementCard } from '@/components/supplement-card'
 import { parseSearchParams } from '@/lib/search'
 import { searchSupplements } from '@/features/supplements/queries'
 import { listBrands } from '@/features/brands/queries'
+import { listCatalogIndex } from '@/features/photo-search/queries'
 
 const popularTerms = ['Whey protein', 'Creatina', 'Pré-treino', 'Colágeno']
 
@@ -14,9 +15,10 @@ export default async function HomePage({
 }) {
   const filters = parseSearchParams(await searchParams)
 
-  const [supplements, brands] = await Promise.all([
+  const [supplements, brands, catalog] = await Promise.all([
     searchSupplements(filters),
     listBrands(),
+    listCatalogIndex(),
   ])
 
   const hasFilters = filters.term !== '' || filters.brandId !== null
@@ -48,7 +50,11 @@ export default async function HomePage({
         {/* key força o remount ao navegar por link ("Limpar filtros") ou
             voltar/avançar do navegador, senão o input/select ficam com o
             valor antigo mesmo depois da URL e dos resultados mudarem. */}
-        <SearchBar key={`${filters.term}:${filters.brandId ?? ''}`} brands={brands} />
+        <SearchBar
+          key={`${filters.term}:${filters.brandId ?? ''}`}
+          brands={brands}
+          catalog={catalog}
+        />
 
         <div className="flex flex-wrap items-center gap-2">
           <span className="text-xs text-muted-foreground">Populares:</span>
