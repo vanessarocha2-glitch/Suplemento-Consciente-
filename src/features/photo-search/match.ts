@@ -38,7 +38,7 @@ const WORD_SPLIT = /[^A-Za-zÀ-ÿ0-9]+/
 type Token = { raw: string; normalized: string }
 
 function stripDiacritics(value: string): string {
-  return value.normalize('NFD').replace(/[̀-ͯ]/g, '')
+  return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
 }
 
 function tokenize(text: string): Token[] {
