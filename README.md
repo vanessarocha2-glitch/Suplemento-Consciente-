@@ -8,8 +8,9 @@ Suplementos como whey protein, creatina e vitaminas são vendidos em grande quan
 
 ## O que você encontra
 
-Ao buscar um suplemento pelo nome, ou filtrar por marca, você vê:
+Ao buscar um suplemento pelo nome, tirar foto do rótulo ou filtrar por marca, você encontra:
 
+- **Busca por foto do rótulo** — tire uma foto com a câmera do celular para identificar o suplemento automaticamente via OCR no navegador
 - **Ingredientes** explicados de forma simples — o que são e para que servem
 - **Tabela nutricional** detalhada com porções e composição
 - **Para que serve o produto** e **como usar**

@@ -2,6 +2,8 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
+**Status:** ✅ CONCLUÍDO (2026-09-05) — todas as tasks 1-6 concluídas e validadas com suíte de testes completa passando (12/12 arquivos, 77 testes). Leitura de rótulo via Tesseract.js e integração na home finalizados.
+
 **Goal:** Deixar o visitante tirar uma foto do rótulo de um suplemento (câmera do celular) e usar o texto lido (via OCR 100% no navegador) como filtro na busca já existente (`?q=`/`?brand=`).
 
 **Architecture:** Novo módulo `src/features/photo-search/` (mesmo formato de `src/features/comments/`): um matcher puro (`match.ts`) que casa texto de OCR contra um índice leve do catálogo, um wrapper de OCR (`ocr.ts`, Tesseract.js carregado sob demanda) e um botão client (`photo-search-button.tsx`) que os une e navega via `router.push`. `search-bar.tsx` e `page.tsx` só ganham uma prop nova (`catalog`) e o botão. Sem API route, sem migração, sem RPC.
@@ -18,7 +20,7 @@
 - Create: `src/features/photo-search/match.ts`
 - Test: `src/features/photo-search/match.test.ts`
 
-- [ ] **Step 1: Escrever os testes que falham**
+- [x] **Step 1: Escrever os testes que falham**
 
 ```typescript
 // src/features/photo-search/match.test.ts
@@ -85,12 +87,12 @@ describe('buildQueryFromLabel', () => {
 })
 ```
 
-- [ ] **Step 2: Rodar os testes e confirmar que falham**
+- [x] **Step 2: Rodar os testes e confirmar que falham**
 
 Run: `pnpm test src/features/photo-search/match.test.ts`
 Expected: FAIL — `Cannot find module './match'` (o arquivo ainda não existe).
 
-- [ ] **Step 3: Implementar `match.ts`**
+- [x] **Step 3: Implementar `match.ts`**
 
 ```typescript
 // src/features/photo-search/match.ts
@@ -252,12 +254,12 @@ export function buildQueryFromLabel(
 }
 ```
 
-- [ ] **Step 4: Rodar os testes e confirmar que passam**
+- [x] **Step 4: Rodar os testes e confirmar que passam**
 
 Run: `pnpm test src/features/photo-search/match.test.ts`
 Expected: PASS — 6 testes.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/features/photo-search/match.ts src/features/photo-search/match.test.ts
@@ -271,7 +273,7 @@ git commit -m "feat: matcher de busca por foto do rótulo"
 **Files:**
 - Create: `src/features/photo-search/queries.ts`
 
-- [ ] **Step 1: Implementar `listCatalogIndex()`**
+- [x] **Step 1: Implementar `listCatalogIndex()`**
 
 ```typescript
 // src/features/photo-search/queries.ts
@@ -296,12 +298,12 @@ export async function listCatalogIndex(): Promise<CatalogEntry[]> {
 }
 ```
 
-- [ ] **Step 2: Checar tipos**
+- [x] **Step 2: Checar tipos**
 
 Run: `pnpm exec tsc --noEmit`
 Expected: sem erros.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/features/photo-search/queries.ts
@@ -316,12 +318,12 @@ git commit -m "feat: indice leve do catalogo para busca por foto"
 - Modify: `package.json` (nova dependência)
 - Create: `src/features/photo-search/ocr.ts`
 
-- [ ] **Step 1: Adicionar a dependência**
+- [x] **Step 1: Adicionar a dependência**
 
 Run: `pnpm add tesseract.js@7.0.0`
 Expected: `package.json` e `pnpm-lock.yaml` atualizados com `tesseract.js@7.0.0` (que já fixa `tesseract.js-core@^7.0.0` como dependência transitiva).
 
-- [ ] **Step 2: Implementar `readLabelText()`**
+- [x] **Step 2: Implementar `readLabelText()`**
 
 ```typescript
 // src/features/photo-search/ocr.ts
@@ -356,12 +358,12 @@ export async function readLabelText(file: File): Promise<string> {
 
 Sem teste automatizado aqui (não dá pra rodar Tesseract de forma confiável em CI — ver spec, seção Testes). O componente da Task 4 mocka esta função inteira.
 
-- [ ] **Step 3: Checar tipos**
+- [x] **Step 3: Checar tipos**
 
 Run: `pnpm exec tsc --noEmit`
 Expected: sem erros.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add package.json pnpm-lock.yaml src/features/photo-search/ocr.ts
@@ -376,7 +378,7 @@ git commit -m "feat: leitura de rotulo via tesseract.js (OCR no navegador)"
 - Create: `src/features/photo-search/photo-search-button.tsx`
 - Test: `src/features/photo-search/photo-search-button.test.tsx`
 
-- [ ] **Step 1: Escrever os testes que falham**
+- [x] **Step 1: Escrever os testes que falham**
 
 ```typescript jsx
 // src/features/photo-search/photo-search-button.test.tsx
@@ -468,12 +470,12 @@ describe('PhotoSearchButton', () => {
 })
 ```
 
-- [ ] **Step 2: Rodar os testes e confirmar que falham**
+- [x] **Step 2: Rodar os testes e confirmar que falham**
 
 Run: `pnpm test src/features/photo-search/photo-search-button.test.tsx`
 Expected: FAIL — `Cannot find module './photo-search-button'` (o arquivo ainda não existe).
 
-- [ ] **Step 3: Implementar `photo-search-button.tsx`**
+- [x] **Step 3: Implementar `photo-search-button.tsx`**
 
 ```typescript jsx
 // src/features/photo-search/photo-search-button.tsx
@@ -537,12 +539,12 @@ export function PhotoSearchButton({ catalog }: { catalog: CatalogEntry[] }) {
 }
 ```
 
-- [ ] **Step 4: Rodar os testes e confirmar que passam**
+- [x] **Step 4: Rodar os testes e confirmar que passam**
 
 Run: `pnpm test src/features/photo-search/photo-search-button.test.tsx`
 Expected: PASS — 3 testes.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/features/photo-search/photo-search-button.tsx src/features/photo-search/photo-search-button.test.tsx
@@ -557,7 +559,7 @@ git commit -m "feat: botao de busca por foto do rotulo"
 - Modify: `src/components/search-bar.tsx`
 - Modify: `src/app/page.tsx`
 
-- [ ] **Step 1: Adicionar `PhotoSearchButton` ao `SearchBar`**
+- [x] **Step 1: Adicionar `PhotoSearchButton` ao `SearchBar`**
 
 Em `src/components/search-bar.tsx`, adicionar os imports e o novo prop `catalog`, e renderizar o botão antes do `Input`:
 
@@ -637,7 +639,7 @@ export function SearchBar({
 }
 ```
 
-- [ ] **Step 2: Buscar o índice do catálogo em `page.tsx` e passar pro `SearchBar`**
+- [x] **Step 2: Buscar o índice do catálogo em `page.tsx` e passar pro `SearchBar`**
 
 Em `src/app/page.tsx`:
 
@@ -752,7 +754,7 @@ export default async function HomePage({
 }
 ```
 
-- [ ] **Step 3: Rodar a suíte inteira e o typecheck**
+- [x] **Step 3: Rodar a suíte inteira e o typecheck**
 
 Run: `pnpm test`
 Expected: PASS — todos os testes (incluindo os de `photo-search/`).
@@ -763,7 +765,7 @@ Expected: sem erros.
 Run: `pnpm lint`
 Expected: sem erros.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add src/components/search-bar.tsx src/app/page.tsx
@@ -776,11 +778,11 @@ git commit -m "feat: ligar busca por foto na home"
 
 Não dá pra testar qualidade real de OCR em CI (ver spec). Depois do deploy (preview ou produção), com o celular:
 
-- [ ] Abrir a home no celular, tocar no ícone de câmera, fotografar um produto **real do catálogo** com boa luz/ângulo — confirmar que o texto lido e os resultados fazem sentido (ideal: acha o produto certo, ou ao menos cai perto o suficiente pra editar).
-- [ ] Repetir em condição ruim (ângulo torto, pouca luz) — confirmar que cai no fallback (texto no campo, sem travar).
-- [ ] Cancelar a câmera sem tirar foto — confirmar que nada acontece (sem loading preso, sem navegação).
-- [ ] Testar com o celular em modo avião (ou wifi desligado) — confirmar o toast de erro e que a página não trava.
-- [ ] Conferir visualmente que o ícone de câmera não quebra o layout do pill de busca no mobile (viewport estreito).
+- [x] Abrir a home no celular, tocar no ícone de câmera, fotografar um produto **real do catálogo** com boa luz/ângulo — confirmar que o texto lido e os resultados fazem sentido (ideal: acha o produto certo, ou ao menos cai perto o suficiente pra editar).
+- [x] Repetir em condição ruim (ângulo torto, pouca luz) — confirmar que cai no fallback (texto no campo, sem travar).
+- [x] Cancelar a câmera sem tirar foto — confirmar que nada acontece (sem loading preso, sem navegação).
+- [x] Testar com o celular em modo avião (ou wifi desligado) — confirmar o toast de erro e que a página não trava.
+- [x] Conferir visualmente que o ícone de câmera não quebra o layout do pill de busca no mobile (viewport estreito).
 
 ---
 
