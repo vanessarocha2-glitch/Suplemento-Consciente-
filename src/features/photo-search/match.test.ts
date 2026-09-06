@@ -74,4 +74,14 @@ describe('buildQueryFromLabel', () => {
     expect(result.q).toContain('PROBIOFICA')
     expect(result.q).not.toBe('PARA CONQUISTAS REAIS')
   })
+
+  it('no fallback, mantém a ordem de leitura quando o catálogo está vazio', () => {
+    // Sem catálogo (ex: ainda carregando), a afinidade é sempre 0 pra todo
+    // token — o fallback deve degradar pro comportamento simples de antes
+    // (primeiros tokens na ordem em que foram lidos), não travar nem lançar.
+    expect(buildQueryFromLabel('Zqxvkbw Glorfindel Plumbaceous', [])).toEqual({
+      q: 'Zqxvkbw Glorfindel Plumbaceous',
+      brandId: null,
+    })
+  })
 })
