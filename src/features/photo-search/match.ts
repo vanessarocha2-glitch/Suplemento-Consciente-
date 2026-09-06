@@ -113,6 +113,23 @@ function itemLabel(entry: CatalogEntry): string {
   return buildLabel(`${entry.category?.name ?? ''} ${entry.name}`)
 }
 
+/**
+ * Quão perto um único token lido chega de QUALQUER palavra do catálogo
+ * (nome de produto ou de marca). Usado só para ordenar o fallback — não
+ * decide match (isso é `scoreLabel`, que compara frases inteiras).
+ */
+function tokenCatalogAffinity(token: string, catalog: CatalogEntry[]): number {
+  let best = 0
+  for (const entry of catalog) {
+    const candidateTokens = itemLabel(entry).split(' ').filter(Boolean)
+    for (const candidate of candidateTokens) {
+      const score = token === candidate ? 1 : diceCoefficient(token, candidate)
+      if (score > best) best = score
+    }
+  }
+  return best
+}
+
 /** Mesmo mecanismo de pontuação do item, mas só contra o nome da marca. */
 function detectBrandId(queryLabel: string, catalog: CatalogEntry[]): string | null {
   const brandLabels = new Map<string, string>()
@@ -151,6 +168,16 @@ export function buildQueryFromLabel(
     return { q: best.entry.name, brandId: best.entry.category?.id ?? brandId }
   }
 
-  const fallback = tokens.slice(0, MAX_FALLBACK_TOKENS).map((token) => token.raw)
+  // Ordena por afinidade com o catálogo (maior primeiro) para escolher QUAIS
+  // tokens mostrar, depois restaura a ordem de leitura original para o texto
+  // ficar legível — sem isso, o fallback tende a pegar frase de marketing do
+  // topo do rótulo em vez de marca/produto, que costumam vir depois.
+  const fallback = tokens
+    .map((token, index) => ({ token, index, affinity: tokenCatalogAffinity(token.normalized, catalog) }))
+    .sort((a, b) => b.affinity - a.affinity || a.index - b.index)
+    .slice(0, MAX_FALLBACK_TOKENS)
+    .sort((a, b) => a.index - b.index)
+    .map((entry) => entry.token.raw)
+
   return { q: fallback.join(' '), brandId }
 }

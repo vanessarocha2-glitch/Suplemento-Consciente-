@@ -58,4 +58,20 @@ describe('buildQueryFromLabel', () => {
       brandId: 'b3',
     })
   })
+
+  it('no fallback, prioriza tokens parecidos com o catálogo em vez da ordem de leitura', () => {
+    // Caso real: OCR leu a frase de marketing do topo do rótulo antes da marca
+    // (erro de leitura: "PROBIOFICA" em vez de "PROBIÓTICA"), e nada bateu
+    // acima do limiar. Pegar sempre "os 3 primeiros tokens lidos" devolveria
+    // a frase de marketing, que não ajuda o usuário a corrigir a busca.
+    const wheyCatalog: CatalogEntry[] = [
+      { id: 'w1', name: '100% Pure Whey', category: { id: 'wb1', name: 'Probiótica' } },
+    ]
+    const text = 'PARA CONQUISTAS REAIS PROBIOFICA SUPLEMENTO ALIMENTAR PROTEICO'
+
+    const result = buildQueryFromLabel(text, wheyCatalog)
+
+    expect(result.q).toContain('PROBIOFICA')
+    expect(result.q).not.toBe('PARA CONQUISTAS REAIS')
+  })
 })
