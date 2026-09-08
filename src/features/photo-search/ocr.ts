@@ -15,10 +15,17 @@ const PREPROCESS_TARGET_WIDTH = 2000
 
 /** Redimensiona e normaliza contraste em escala de cinza antes do OCR. */
 async function preprocessForOcr(file: File): Promise<Blob> {
-  const bitmap = await createImageBitmap(file)
-  const scale = PREPROCESS_TARGET_WIDTH / bitmap.width
-  const width = PREPROCESS_TARGET_WIDTH
-  const height = Math.round(bitmap.height * scale)
+  // `imageOrientation: 'from-image'` explícito (em vez de confiar no default
+  // da engine) evita foto de rótulo saindo de lado por EXIF mal interpretado.
+  // `resizeWidth` deixa o navegador decodificar já no tamanho final, em vez
+  // de decodificar a foto inteira do celular (podendo ser 12+ megapixels)
+  // pra só depois reduzir — mais leve de memória numa foto de câmera real.
+  const bitmap = await createImageBitmap(file, {
+    imageOrientation: 'from-image',
+    resizeWidth: PREPROCESS_TARGET_WIDTH,
+    resizeQuality: 'medium',
+  })
+  const { width, height } = bitmap
 
   const canvas = document.createElement('canvas')
   canvas.width = width
@@ -27,6 +34,7 @@ async function preprocessForOcr(file: File): Promise<Blob> {
   if (!ctx) throw new Error('Canvas 2D não suportado neste navegador')
 
   ctx.drawImage(bitmap, 0, 0, width, height)
+  bitmap.close()
 
   const imageData = ctx.getImageData(0, 0, width, height)
   const { data } = imageData
