@@ -5,6 +5,63 @@
 // do CDN ficam de uma versão diferente do wrapper JS instalado localmente.
 const TESSERACT_VERSION = '7.0.0'
 
+// Testado manualmente com fotos reais de rótulo: sem isso, o Tesseract erra
+// sistematicamente o texto grande/em negrito (o nome do produto, justamente
+// o que mais importa). Redimensionar pra uma largura fixa (ajuda tanto fotos
+// pequenas quanto reduz fotos de celular enormes) + converter pra escala de
+// cinza com contraste normalizado melhorou a leitura nos 3 rótulos testados,
+// sem precisar mudar nenhum parâmetro do Tesseract em si.
+const PREPROCESS_TARGET_WIDTH = 2000
+
+/** Redimensiona e normaliza contraste em escala de cinza antes do OCR. */
+async function preprocessForOcr(file: File): Promise<Blob> {
+  const bitmap = await createImageBitmap(file)
+  const scale = PREPROCESS_TARGET_WIDTH / bitmap.width
+  const width = PREPROCESS_TARGET_WIDTH
+  const height = Math.round(bitmap.height * scale)
+
+  const canvas = document.createElement('canvas')
+  canvas.width = width
+  canvas.height = height
+  const ctx = canvas.getContext('2d')
+  if (!ctx) throw new Error('Canvas 2D não suportado neste navegador')
+
+  ctx.drawImage(bitmap, 0, 0, width, height)
+
+  const imageData = ctx.getImageData(0, 0, width, height)
+  const { data } = imageData
+  const pixelCount = width * height
+  const gray = new Uint8ClampedArray(pixelCount)
+
+  let min = 255
+  let max = 0
+  for (let i = 0; i < pixelCount; i++) {
+    const offset = i * 4
+    const value = 0.299 * data[offset] + 0.587 * data[offset + 1] + 0.114 * data[offset + 2]
+    gray[i] = value
+    if (value < min) min = value
+    if (value > max) max = value
+  }
+
+  const range = max - min || 1
+  for (let i = 0; i < pixelCount; i++) {
+    const normalized = ((gray[i] - min) / range) * 255
+    const offset = i * 4
+    data[offset] = normalized
+    data[offset + 1] = normalized
+    data[offset + 2] = normalized
+  }
+
+  ctx.putImageData(imageData, 0, 0)
+
+  return new Promise((resolve, reject) => {
+    canvas.toBlob((blob) => {
+      if (blob) resolve(blob)
+      else reject(new Error('Falha ao gerar imagem processada para OCR'))
+    }, 'image/png')
+  })
+}
+
 /**
  * Lê o texto de uma foto de rótulo, 100% no navegador (Tesseract.js).
  * Importado dinamicamente para nunca entrar no bundle inicial.
@@ -21,7 +78,8 @@ export async function readLabelText(file: File): Promise<string> {
   })
 
   try {
-    const { data } = await worker.recognize(file)
+    const preprocessed = await preprocessForOcr(file)
+    const { data } = await worker.recognize(preprocessed)
     return data.text.trim()
   } finally {
     await worker.terminate()
